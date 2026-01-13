@@ -1,4 +1,5 @@
 import streamlit as st
+import re
 
 # =============================
 # PAGE CONFIG
@@ -101,14 +102,15 @@ if mode == "🔐 Encrypt":
 else:
 
     cipher = st.text_area(
-        "Cipher Text (1 code per line, use / for space):",
+        "Cipher Text:",
         height=120,
-        placeholder="MD15\nMP15\nMR18\n/"
+        placeholder="Enter Cipher Text Here..."
     )
 
     if st.button("Decrypt 🔓"):
-        cipher_text = cipher.replace("\n", "").replace(" ", "").strip()
-
+        cipher_text = cipher.upper()
+        cipher_text = re.sub(r"[^A-Z0-9]", "", cipher_text)
+        
         i = 0
         result = []
         invalid = []
