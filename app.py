@@ -73,7 +73,12 @@ mode = st.radio(
 # ---------- ENCRYPT ----------
 if mode == "🔐 Encrypt":
 
-    text = st.text_area("Plain Text (A–Z, 0–9):", height=120)
+    text = st.text_area(
+        "Plain Text (A–Z, 0–9):",
+        height=120,
+        placeholder="Enter Plain Text Here..."
+    )
+
 
     if st.button("Encrypt 🔐"):
         result = []
@@ -110,7 +115,7 @@ else:
     if st.button("Decrypt 🔓"):
         cipher_text = cipher.upper()
         cipher_text = re.sub(r"[^A-Z0-9]", "", cipher_text)
-        
+
         i = 0
         result = []
         invalid = []
