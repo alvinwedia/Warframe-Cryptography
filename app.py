@@ -44,6 +44,12 @@ number_cipher = {
 reverse_letter = {v: k for k, v in letter_cipher.items()}
 reverse_number = {v: k for k, v in number_cipher.items()}
 
+all_tokens = list(reverse_letter.keys()) + list(reverse_number.keys())
+
+# sort by length descending (untuk greedy match)
+all_tokens.sort(key=len, reverse=True)
+
+
 # =============================
 # HEADER
 # =============================
@@ -84,8 +90,9 @@ if mode == "🔐 Encrypt":
 
         st.markdown("### Cipher Output")
 
-        output = "\n".join(result)   # PER BARIS (TOKEN STYLE)
+        output = "".join(result)   # horizontal, tanpa spasi
         st.markdown(f"<div class='output-box'>{output}</div>", unsafe_allow_html=True)
+
 
         if invalid:
             st.warning(f"Unsupported characters: {', '.join(set(invalid))}")
@@ -100,19 +107,30 @@ else:
     )
 
     if st.button("Decrypt 🔓"):
-        tokens = [t.strip() for t in cipher.splitlines() if t.strip() != ""]
+        cipher_text = cipher.replace("\n", "").replace(" ", "").strip()
+
+        i = 0
         result = []
         invalid = []
 
-        for token in tokens:
-            if token == "/":
-                result.append(" ")
-            elif token in reverse_letter:
-                result.append(reverse_letter[token])
-            elif token in reverse_number:
-                result.append(reverse_number[token])
-            else:
-                invalid.append(token)
+        while i < len(cipher_text):
+            match_found = False
+
+            for token in all_tokens:
+                if cipher_text.startswith(token, i):
+                    if token in reverse_letter:
+                        result.append(reverse_letter[token])
+                    elif token in reverse_number:
+                        result.append(reverse_number[token])
+
+                    i += len(token)
+                    match_found = True
+                    break
+
+            if not match_found:
+                invalid.append(cipher_text[i:i+5])
+                i += 1
+
 
         st.markdown("### Plain Text Output")
 

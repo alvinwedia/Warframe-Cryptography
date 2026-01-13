@@ -48,7 +48,9 @@ body {
     padding: 15px;
     font-family: Consolas, monospace;
     color: #7dd3ff;
-    white-space: pre-wrap;
+
+    word-break: break-all;   /* biar bisa wrap walau tanpa spasi */
+    white-space: normal;
 }
 
 /* ===== FOOTER ===== */
