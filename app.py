@@ -16,6 +16,11 @@ st.set_page_config(
 with open("assets/style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+bg_class = "bg-encrypt" if st.session_state.get("mode", "🔐 Encrypt") == "🔐 Encrypt" else "bg-decrypt"
+
+st.markdown(f"<div class='{bg_class}'></div>", unsafe_allow_html=True)
+
+
 # =============================
 # CIPHER DATA
 # =============================
@@ -69,6 +74,9 @@ mode = st.radio(
     ["🔐 Encrypt", "🔓 Decrypt"],
     horizontal=True
 )
+# save mode for reactive background
+st.session_state["mode"] = mode
+
 
 # ---------- ENCRYPT ----------
 if mode == "🔐 Encrypt":

@@ -1,3 +1,44 @@
+/* ===== ANIMATED BACKGROUND ===== */
+
+.bg-encrypt::before,
+.bg-decrypt::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: 300% 300%;
+    animation: gradientMove 12s ease infinite;
+}
+
+/* Encrypt = blue cyber */
+.bg-encrypt::before {
+    background-image: linear-gradient(
+        -45deg,
+        #020409,
+        #071a3a,
+        #0b3a6d,
+        #020409
+    );
+}
+
+/* Decrypt = purple void */
+.bg-decrypt::before {
+    background-image: linear-gradient(
+        -45deg,
+        #020409,
+        #2b0b3f,
+        #5b1a7a,
+        #020409
+    );
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
 /* ===== GLOBAL THEME ===== */
 
 body {
