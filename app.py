@@ -16,9 +16,7 @@ st.set_page_config(
 with open("assets/style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-bg_class = "bg-encrypt" if st.session_state.get("mode", "🔐 Encrypt") == "🔐 Encrypt" else "bg-decrypt"
-
-st.markdown(f"<div class='{bg_class}'></div>", unsafe_allow_html=True)
+st.markdown("<div id='animated-bg'></div>", unsafe_allow_html=True)
 
 
 # =============================
@@ -74,6 +72,28 @@ mode = st.radio(
     ["🔐 Encrypt", "🔓 Decrypt"],
     horizontal=True
 )
+
+if mode == "🔐 Encrypt":
+    st.markdown("""
+    <style>
+    :root {
+        --c1: #020409;
+        --c2: #071a3a;
+        --c3: #0b3a6d;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <style>
+    :root {
+        --c1: #020409;
+        --c2: #2b0b3f;
+        --c3: #5b1a7a;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # save mode for reactive background
 st.session_state["mode"] = mode
 

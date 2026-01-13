@@ -1,34 +1,18 @@
 /* ===== ANIMATED BACKGROUND ===== */
 
-.bg-encrypt::before,
-.bg-decrypt::before {
-    content: "";
+#animated-bg {
     position: fixed;
     inset: 0;
     z-index: -1;
     background-size: 300% 300%;
-    animation: gradientMove 12s ease infinite;
-}
+    animation: gradientMove 14s ease infinite;
 
-/* Encrypt = blue cyber */
-.bg-encrypt::before {
     background-image: linear-gradient(
         -45deg,
-        #020409,
-        #071a3a,
-        #0b3a6d,
-        #020409
-    );
-}
-
-/* Decrypt = purple void */
-.bg-decrypt::before {
-    background-image: linear-gradient(
-        -45deg,
-        #020409,
-        #2b0b3f,
-        #5b1a7a,
-        #020409
+        var(--c1),
+        var(--c2),
+        var(--c3),
+        var(--c1)
     );
 }
 
