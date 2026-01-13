@@ -1,13 +1,24 @@
 import streamlit as st
 
-st.set_page_config(page_title="Warframe Cipher", page_icon="🛡️", layout="centered")
-
-st.title("🛡️ Warframe Cipher Generator")
-st.write("Enkripsi teks menggunakan Warframe (A–Z) dan Tenet Weapons (0–9)")
+# =============================
+# PAGE CONFIG
+# =============================
+st.set_page_config(
+    page_title="Warframe Cipher System",
+    page_icon="🛡️",
+    layout="centered"
+)
 
 # =============================
-# DATA CIPHER HURUF
+# LOAD CSS
 # =============================
+with open("assets/style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# =============================
+# CIPHER DATA
+# =============================
+
 letter_cipher = {
     "A": "MP15", "B": "ML18", "C": "MSW21", "D": "MDV24", "E": "FRR15",
     "F": "MIW13", "G": "MTS19", "H": "MC17", "I": "MD16", "J": "FOE24",
@@ -17,9 +28,6 @@ letter_cipher = {
     "Z": "FA14"
 }
 
-# =============================
-# DATA CIPHER ANGKA
-# =============================
 number_cipher = {
     "0": "TAP760",
     "1": "TFR22",
@@ -33,30 +41,90 @@ number_cipher = {
     "9": "TS120"
 }
 
+reverse_letter = {v: k for k, v in letter_cipher.items()}
+reverse_number = {v: k for k, v in number_cipher.items()}
+
 # =============================
-# INPUT USER
+# HEADER
 # =============================
-plaintext = st.text_input("Masukkan teks (A–Z dan 0–9):", "")
 
-if st.button("🔐 Enkripsi"):
-    result = []
-    invalid = []
+st.markdown("<div class='title'>WARFRAME CIPHER</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Encrypt & Decrypt using Warframe Algorithm</div>", unsafe_allow_html=True)
 
-    for ch in plaintext.upper():
-        if ch in letter_cipher:
-            result.append(letter_cipher[ch])
-        elif ch in number_cipher:
-            result.append(number_cipher[ch])
-        elif ch == " ":
-            result.append("/")  # pemisah kata
-        else:
-            invalid.append(ch)
+# =============================
+# MAIN CARD
+# =============================
 
-    st.subheader("Cipher Text:")
-    st.code(" ".join(result))
+st.markdown("<div class='card'>", unsafe_allow_html=True)
 
-    if invalid:
-        st.warning(f"Karakter tidak dikenali: {', '.join(set(invalid))}")
+mode = st.radio(
+    "Select Mode",
+    ["🔐 Encrypt", "🔓 Decrypt"],
+    horizontal=True
+)
 
-st.markdown("---")
-st.caption("Cipher System based on Warframe & Tenet Weapons | Streamlit App")
+# ---------- ENCRYPT ----------
+if mode == "🔐 Encrypt":
+
+    text = st.text_area("Plain Text (A–Z, 0–9):", height=120)
+
+    if st.button("Encrypt 🔐"):
+        result = []
+        invalid = []
+
+        for ch in text.upper():
+            if ch in letter_cipher:
+                result.append(letter_cipher[ch])
+            elif ch in number_cipher:
+                result.append(number_cipher[ch])
+            elif ch == " ":
+                result.append("/")
+            else:
+                invalid.append(ch)
+
+        st.markdown("### Cipher Output")
+
+        output = "\n".join(result)   # PER BARIS (TOKEN STYLE)
+        st.markdown(f"<div class='output-box'>{output}</div>", unsafe_allow_html=True)
+
+        if invalid:
+            st.warning(f"Unsupported characters: {', '.join(set(invalid))}")
+
+# ---------- DECRYPT ----------
+else:
+
+    cipher = st.text_area(
+        "Cipher Text (1 code per line, use / for space):",
+        height=120,
+        placeholder="MD15\nMP15\nMR18\n/"
+    )
+
+    if st.button("Decrypt 🔓"):
+        tokens = [t.strip() for t in cipher.splitlines() if t.strip() != ""]
+        result = []
+        invalid = []
+
+        for token in tokens:
+            if token == "/":
+                result.append(" ")
+            elif token in reverse_letter:
+                result.append(reverse_letter[token])
+            elif token in reverse_number:
+                result.append(reverse_number[token])
+            else:
+                invalid.append(token)
+
+        st.markdown("### Plain Text Output")
+
+        st.markdown(f"<div class='output-box'>{''.join(result)}</div>", unsafe_allow_html=True)
+
+        if invalid:
+            st.warning(f"Invalid cipher codes: {', '.join(set(invalid))}")
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+# =============================
+# FOOTER
+# =============================
+
+st.markdown("<div class='footer'>Warframe Cipher System</div>", unsafe_allow_html=True)
